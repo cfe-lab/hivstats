@@ -1,0 +1,24 @@
+#! /bin/sh
+
+set -e
+
+FASTA="$1"
+shift
+
+if test "$#" -gt 0
+then
+	echo "Unexpected arguments: $@" 1>&2
+	exit 1
+fi
+
+WORKING_FOLDER=output/"$(basename -- "$FASTA" | sed 's/[.]fasta$//')"
+
+set -x
+
+mkdir -p -- "$WORKING_FOLDER"
+uv run cfeintact version > "$WORKING_FOLDER"/cfeintact-version.txt
+
+uv run cfeintact check \
+	--output "$WORKING_FOLDER" \
+	--subtype all \
+	"$FASTA"

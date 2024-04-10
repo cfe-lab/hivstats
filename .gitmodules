@@ -1,0 +1,3 @@
+[submodule "dependencies/CFEIntact"]
+	path = dependencies/CFEIntact
+	url = https://github.com/cfe-lab/CFEIntact

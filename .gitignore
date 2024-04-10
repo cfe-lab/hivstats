@@ -1,0 +1,7 @@
+*.json
+.ipynb_checkpoints
+__pycache__/
+
+output/**/*.csv
+output/**/*.fasta
+*temporary*

@@ -1,0 +1,115 @@
+#! /usr/bin/env python3
+
+from Bio import SeqIO
+import sys
+import os
+import csv
+import argparse
+import Bio
+from jarowinkler import jaro_similarity
+
+from Bio import AlignIO, Seq, SeqIO, SeqRecord, Align
+
+aligner = Align.PairwiseAligner()
+aligner.mode = 'global'
+aligner.match_score = 2
+aligner.mismatch_score = -1
+aligner.open_gap_score = -1.5
+aligner.extend_gap_score = -0.2
+
+def translate(seq, frame = 0, to_stop = False):
+    for_translation = seq[frame:]
+    for_translation += 'N' * ({0: 0, 1: 2, 2: 1}[len(for_translation) % 3])
+    return Seq.translate(for_translation, to_stop = to_stop)
+
+def find_closest(aminoacids, start, direction, target):
+    distance = 0
+    n = len(aminoacids) - 1
+
+    while start + distance >= 0 and start + distance <= n:
+        if aminoacids[start + distance] == target:
+            return start + distance
+        distance += direction
+
+    if target == '*':
+        return n
+    else:
+        return 0
+
+def get_aminos(query, reference_aminoacids):
+    try:
+        query_aminoacids_table = [translate(query, i) for i in range(3)]
+    except Bio.Data.CodonTable.TranslationError as e:
+        log.error(e)
+        raise
+
+    return max(query_aminoacids_table,
+               key = lambda y: jaro_similarity(y, reference_aminoacids))
+
+def get_biggest_protein(has_start_codon, aminoacids):
+    def skip_to_startcodon(x):
+        index = x.find("M")
+        if index >= 0:
+            return x[index:]
+        else:
+            return ""
+
+    parts = aminoacids.split("*")
+    subparts = [skip_to_startcodon(x) for x in parts] if has_start_codon else parts
+    longest = max(subparts, key=len)
+    return longest
+
+def has_start_codon(aminoacids):
+    return aminoacids[0] == "M"
+
+def has_stop_codon(aminoacids):
+    return aminoacids[-1] == "*"
+
+def get_protein(aminos):
+    return get_biggest_protein(has_start_codon(aminos), aminos)
+
+def aligner_distance(query, reference):
+    orf_alignment = aligner.align(query, reference)[0]
+    return aligner.match_score - (orf_alignment.score / len(query))
+
+def process_fasta(input_filename):
+    sequences = []
+    with open(input_filename, "r") as fasta_file:
+        for record in SeqIO.parse(fasta_file, "fasta"):
+            sequence_id = record.id
+            sequence = str(record.seq)
+            sequences.append((sequence_id, sequence))
+    return sequences
+
+def main(input_filename, output_filename):
+    name = os.path.basename(input_filename).replace('.fasta', '')
+    sequences = process_fasta(input_filename)
+
+    reference_file = os.path.normpath(os.path.join(os.path.dirname(input_filename), "..", "hxb2", os.path.basename(input_filename)))
+    reference = process_fasta(reference_file)
+    assert 1 == len(reference)
+    (reference_id, reference_sequence) = reference[0]
+    reference_aminoacids = translate(reference_sequence)
+
+    with open(output_filename, 'w', newline='') as csv_file:
+        csv_writer = csv.writer(csv_file)
+        csv_writer.writerow(['qseqid', 'region', 'start', 'end', 'distance', 'protein', 'aminoacids'])
+
+        for sequence_id, sequence in sequences:
+            start = 0
+            end = len(sequence)
+            aminoacids = get_aminos(sequence, reference_aminoacids)
+            protein = get_protein(aminoacids)
+            distance = aligner_distance(protein, reference_aminoacids)
+
+            csv_writer.writerow([sequence_id, name, start, end, distance, protein, aminoacids])
+
+    print(f"CSV file '{output_filename}' has been generated.", file=sys.stderr)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Convert FASTA sequences to CSV with calculated distances.")
+    parser.add_argument("input_file", help="Input FASTA file containing HIV sequences")
+    parser.add_argument("output_file", help="Output CSV file containing the results")
+    args = parser.parse_args()
+
+    main(args.input_file, args.output_file)

@@ -1,0 +1,48 @@
+#! /usr/bin/env python3
+
+import argparse
+import pandas as pd
+
+def join_csv_files(csv_files):
+    # Initialize an empty DataFrame to store the combined data
+    combined_data = pd.DataFrame()
+
+    # Loop through each CSV file and join them based on column names
+    for csv_file in csv_files:
+        # Read the CSV file into a DataFrame
+        df = pd.read_csv(csv_file)
+
+        # Check if the DataFrame is empty (for the first file)
+        if combined_data.empty:
+            combined_data = df
+        else:
+            # Identify common columns for joining
+            common_columns = list(set(combined_data.columns) & set(df.columns))
+
+            # Check if there are any common columns for joining
+            if common_columns:
+                # Merge the DataFrames based on common columns
+                combined_data = pd.merge(combined_data, df, on=common_columns, how='outer')
+            else:
+                # If no common columns, concatenate the DataFrames
+                combined_data = pd.concat([combined_data, df], axis=1)
+
+    return combined_data
+
+def main():
+    parser = argparse.ArgumentParser(description="Read and join CSV files based on column names.")
+    parser.add_argument("csv_files", nargs="+", help="List of CSV files to be joined")
+    parser.add_argument("output_file", help="Output file for the combined data")
+    args = parser.parse_args()
+
+    # Join the CSV files
+    combined_data = join_csv_files(args.csv_files)
+    sorted_combined = combined_data.sort_values(by=['qseqid', 'region'])
+
+    # Save the combined DataFrame to the specified output file
+    sorted_combined.to_csv(args.output_file, index=False)
+
+    print("CSV files have been successfully joined and saved as", args.output_file)
+
+if __name__ == "__main__":
+    main()

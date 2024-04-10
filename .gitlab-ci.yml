@@ -1,0 +1,14 @@
+
+stages:
+  - test
+
+test:
+  stage: test
+  resource_group: hivstats
+  image: ubuntu:22.04
+  interruptible: true
+  script:
+    - sh src/install-dependencies.sh
+    - sh src/test-locally.sh
+  tags:
+    - nodb

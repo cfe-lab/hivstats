@@ -1,0 +1,204 @@
+###############
+## Distances ##
+###############
+Name: gag
+Count: 1412
+Mean: 0.24
+Median: 0.24
+Mode: 0.23
+Standard Deviation: 0.05
+Minimum: 0.0
+Maximum: 0.36329365079365084
+------------------------------------------
+Name: pol
+Count: 1412
+Mean: 0.17
+Median: 0.17
+Mode: 0.19
+Standard Deviation: 0.03
+Minimum: 0.0
+Maximum: 0.30019762845849796
+------------------------------------------
+Name: env
+Count: 1412
+Mean: 0.6
+Median: 0.6
+Mode: 0.51
+Standard Deviation: 0.06
+Minimum: 0.0
+Maximum: 0.8311602209944755
+------------------------------------------
+Name: vif
+Count: 1412
+Mean: 0.37
+Median: 0.36
+Mode: 0.33
+Standard Deviation: 0.08
+Minimum: 0.0
+Maximum: 0.59375
+------------------------------------------
+Name: vpr
+Count: 1412
+Mean: 0.32
+Median: 0.31
+Mode: 0.22
+Standard Deviation: 0.09
+Minimum: 0.0
+Maximum: 0.5625
+------------------------------------------
+Name: tat_exon1
+Count: 1412
+Mean: 0.47
+Median: 0.47
+Mode: 0.46
+Standard Deviation: 0.13
+Minimum: 0.0
+Maximum: 0.8949367088607598
+------------------------------------------
+Name: rev_exon1
+Count: 1412
+Mean: 0.49
+Median: 0.46
+Mode: 0.46
+Standard Deviation: 0.16
+Minimum: 0.0
+Maximum: 1.1806451612903224
+------------------------------------------
+Name: vpu
+Count: 1412
+Mean: 0.77
+Median: 0.78
+Mode: 0.78
+Standard Deviation: 0.11
+Minimum: 0.0
+Maximum: 1.117777777777778
+------------------------------------------
+Name: tat_exon2
+Count: 1413
+Mean: 0.6
+Median: 0.58
+Mode: 0.48
+Standard Deviation: 0.19
+Minimum: 0.0
+Maximum: 1.4210526315789473
+------------------------------------------
+Name: rev_exon2
+Count: 1412
+Mean: 0.46
+Median: 0.46
+Mode: 0.42
+Standard Deviation: 0.12
+Minimum: 0.0
+Maximum: 0.7577319587628868
+------------------------------------------
+Name: nef
+Count: 1412
+Mean: 0.56
+Median: 0.55
+Mode: 0.52
+Standard Deviation: 0.08
+Minimum: 0.0
+Maximum: 0.8023584905660375
+------------------------------------------
+##################
+## Indel impact ##
+##################
+Name: gag
+Count: 1387
+Mean: 0.02
+Median: 0.0
+Mode: 0.0
+Standard Deviation: 0.83
+Minimum: 0.0
+Maximum: 31.0
+------------------------------------------
+Name: pol
+Count: 1388
+Mean: 0.11
+Median: 0.0
+Mode: 0.0
+Standard Deviation: 2.32
+Minimum: 0.0
+Maximum: 56.0
+------------------------------------------
+Name: env
+Count: 1387
+Mean: 6.74
+Median: 0.0
+Mode: 0.0
+Standard Deviation: 14.97
+Minimum: 0.0
+Maximum: 93.0
+------------------------------------------
+Name: vif
+Count: 1388
+Mean: 0.0
+Median: 0.0
+Mode: 0.0
+Standard Deviation: 0.0
+Minimum: 0.0
+Maximum: 0.0
+------------------------------------------
+Name: vpr
+Count: 1388
+Mean: 0.0
+Median: 0.0
+Mode: 0.0
+Standard Deviation: 0.0
+Minimum: 0.0
+Maximum: 0.0
+------------------------------------------
+Name: tat_exon1
+Count: 1388
+Mean: 0.0
+Median: 0.0
+Mode: 0.0
+Standard Deviation: 0.0
+Minimum: 0.0
+Maximum: 0.0
+------------------------------------------
+Name: rev_exon1
+Count: 1388
+Mean: 0.0
+Median: 0.0
+Mode: 0.0
+Standard Deviation: 0.0
+Minimum: 0.0
+Maximum: 0.0
+------------------------------------------
+Name: vpu
+Count: 1388
+Mean: 0.0
+Median: 0.0
+Mode: 0.0
+Standard Deviation: 0.0
+Minimum: 0.0
+Maximum: 0.0
+------------------------------------------
+Name: tat_exon2
+Count: 1388
+Mean: 0.0
+Median: 0.0
+Mode: 0.0
+Standard Deviation: 0.0
+Minimum: 0.0
+Maximum: 0.0
+------------------------------------------
+Name: rev_exon2
+Count: 1388
+Mean: 0.0
+Median: 0.0
+Mode: 0.0
+Standard Deviation: 0.0
+Minimum: 0.0
+Maximum: 0.0
+------------------------------------------
+Name: nef
+Count: 1387
+Mean: 0.43
+Median: 0.0
+Mode: 0.0
+Standard Deviation: 3.93
+Minimum: 0.0
+Maximum: 42.0
+------------------------------------------
