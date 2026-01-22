@@ -17,32 +17,33 @@ Used when deriving size distributions. Only checks CFEIntact defects that are in
 - **Scramble**: Sequence order is scrambled
 - **InternalInversion**: Part of sequence is inverted
 - **UnknownNucleotide**: Contains ambiguous bases
+- **MissingORF**: Expected ORF is missing
+- **LongDeletion**: Large deletions in the sequence
 
 These defects can be detected without knowing expected sizes or alignment distances.
 
-## Level 2: Size-Based Intactness (for distance analysis)
+## Level 2: Distance-Based Intactness (for distance analysis)
 
-Used when deriving distance distributions. Includes Level 1 defects plus size-related CFEIntact defects:
-- **LongDeletion**: Large deletions in the sequence
-- **LongInsertion**: Large insertions in the sequence
-- **PackagingSignalDeletion**: Deletions in packaging signal
-- **MajorSpliceDonorSiteMutated**: Splice sites missing
-- **MutatedStartCodon**: Start codon is mutated
-- **MutatedStopCodon**: Stop codon is mutated
-- **MissingORF**: Expected ORF is missing
-
-These defects relate to length but not to alignment distance or frameshifts.
-
-## Level 3: Distance-Based Intactness (for indel impact analysis)
-
-Used when deriving indel impact distributions. Includes all CFEIntact defects:
-- All defects from Levels 1 and 2
+Used when deriving distance distributions. Includes Level 1 defects plus defects that depend on alignment quality:
+- All structural defects from Level 1
 - **Plus**:
-  - **SequenceDivergence**: Sequence too divergent from reference
-  - **Frameshift**: Out of frame indels
+  - **Deletion**: Deletion mutations
+  - **Insertion**: Insertion mutations
+  - **MutatedStartCodon**: Start codon is mutated
+  - **MutatedStopCodon**: Stop codon is mutated
   - **InternalStop**: Internal stop codons
 
-These defects depend on sequence alignment and can be influenced by indels.
+These defects relate to sequence alignment and codon integrity but don't depend on knowing expected distances.
+
+## Level 3: Indel-Based Intactness (for indel impact analysis)
+
+Used when deriving indel impact distributions. Includes structural defects plus actual indel defects:
+- All defects from Level 1 (structural defects)
+- **Plus**:
+  - **Deletion**: Deletion mutations in the sequence
+  - **Insertion**: Insertion mutations in the sequence
+
+This focused approach only excludes sequences with clear structural problems or actual insertion/deletion defects, allowing us to analyze the impact of indels without being confounded by other distance-related metrics like sequence divergence, frameshifts, or stop codons (which may themselves be consequences of indels we're trying to measure).
 
 ## Why This Matters
 

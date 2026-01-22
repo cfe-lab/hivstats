@@ -104,101 +104,101 @@ Maximum: 0.8023584905660375
 ## Indel impact ##
 ##################
 Name: gag
-Count: 1387
+Count: 1890
+Mean: 42.11
+Median: 0.0
+Mode: 0.0
+Standard Deviation: 214.6
+Minimum: 0.0
+Maximum: 1424.0
+------------------------------------------
+Name: pol
+Count: 1890
+Mean: 80.44
+Median: 0.0
+Mode: 0.0
+Standard Deviation: 319.22
+Minimum: 0.0
+Maximum: 2170.0
+------------------------------------------
+Name: env
+Count: 1890
+Mean: 90.61
+Median: 0.0
+Mode: 0.0
+Standard Deviation: 330.91
+Minimum: 0.0
+Maximum: 2414.0
+------------------------------------------
+Name: vif
+Count: 1890
+Mean: 3.15
+Median: 0.0
+Mode: 0.0
+Standard Deviation: 31.45
+Minimum: 0.0
+Maximum: 477.0
+------------------------------------------
+Name: vpr
+Count: 1890
+Mean: 0.18
+Median: 0.0
+Mode: 0.0
+Standard Deviation: 4.26
+Minimum: 0.0
+Maximum: 150.0
+------------------------------------------
+Name: tat_exon1
+Count: 1890
+Mean: 0.33
+Median: 0.0
+Mode: 0.0
+Standard Deviation: 4.98
+Minimum: 0.0
+Maximum: 102.0
+------------------------------------------
+Name: rev_exon1
+Count: 1890
 Mean: 0.02
 Median: 0.0
 Mode: 0.0
-Standard Deviation: 0.83
+Standard Deviation: 0.94
 Minimum: 0.0
-Maximum: 31.0
-------------------------------------------
-Name: pol
-Count: 1388
-Mean: 0.11
-Median: 0.0
-Mode: 0.0
-Standard Deviation: 2.32
-Minimum: 0.0
-Maximum: 56.0
-------------------------------------------
-Name: env
-Count: 1387
-Mean: 6.74
-Median: 0.0
-Mode: 0.0
-Standard Deviation: 14.97
-Minimum: 0.0
-Maximum: 93.0
-------------------------------------------
-Name: vif
-Count: 1388
-Mean: 0.0
-Median: 0.0
-Mode: 0.0
-Standard Deviation: 0.0
-Minimum: 0.0
-Maximum: 0.0
-------------------------------------------
-Name: vpr
-Count: 1388
-Mean: 0.0
-Median: 0.0
-Mode: 0.0
-Standard Deviation: 0.0
-Minimum: 0.0
-Maximum: 0.0
-------------------------------------------
-Name: tat_exon1
-Count: 1388
-Mean: 0.0
-Median: 0.0
-Mode: 0.0
-Standard Deviation: 0.0
-Minimum: 0.0
-Maximum: 0.0
-------------------------------------------
-Name: rev_exon1
-Count: 1388
-Mean: 0.0
-Median: 0.0
-Mode: 0.0
-Standard Deviation: 0.0
-Minimum: 0.0
-Maximum: 0.0
+Maximum: 41.0
 ------------------------------------------
 Name: vpu
-Count: 1388
-Mean: 0.0
+Count: 1890
+Mean: 0.61
 Median: 0.0
 Mode: 0.0
-Standard Deviation: 0.0
+Standard Deviation: 9.09
 Minimum: 0.0
-Maximum: 0.0
+Maximum: 192.0
 ------------------------------------------
 Name: tat_exon2
-Count: 1388
-Mean: 0.0
+Count: 1890
+Mean: 0.63
 Median: 0.0
 Mode: 0.0
-Standard Deviation: 0.0
+Standard Deviation: 4.45
 Minimum: 0.0
-Maximum: 0.0
+Maximum: 35.0
 ------------------------------------------
 Name: rev_exon2
-Count: 1388
-Mean: 0.0
+Count: 1890
+Mean: 0.21
 Median: 0.0
 Mode: 0.0
-Standard Deviation: 0.0
+Standard Deviation: 3.82
 Minimum: 0.0
-Maximum: 0.0
+Maximum: 128.0
 ------------------------------------------
 Name: nef
-Count: 1387
-Mean: 0.43
+Count: 1890
+Mean: 18.08
 Median: 0.0
 Mode: 0.0
-Standard Deviation: 3.93
+Standard Deviation: 87.36
 Minimum: 0.0
-Maximum: 42.0
+Maximum: 590.0
 ------------------------------------------

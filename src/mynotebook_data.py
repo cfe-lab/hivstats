@@ -28,8 +28,9 @@ DISTANCE_DEFECTS = STRUCTURAL_DEFECTS | {
     "InternalStop",
 }
 
-INDEL_DEFECTS = STRUCTURAL_DEFECTS | DISTANCE_DEFECTS | {
-    "SequenceDivergence",
+INDEL_DEFECTS = STRUCTURAL_DEFECTS | {
+    "Deletion",
+    "Insertion",
 }
 
 OTHER_DEFECTS = {
