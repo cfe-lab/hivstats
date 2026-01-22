@@ -99,3 +99,39 @@ This approach ensures we don't use metric-derived thresholds to define the very 
 **All intactness criteria come from CFEIntact itself** - we don't invent additional thresholds. We simply categorize CFEIntact's existing defect codes by what they depend on.
 
 ---
+
+# Kernel Density Estimation (KDE)
+
+All distribution plots now include **Kernel Density Estimation** curves overlaid on the histograms. KDE provides a smooth, continuous estimate of the underlying probability density without assuming any particular distribution shape (like Normal or unimodal).
+
+## How KDE Works
+
+KDE places a "bump" (Gaussian kernel) on each data point and sums all bumps together:
+
+$$\hat{f}(x) = \frac{1}{n h}\sum_{i=1}^n K\left(\frac{x-x_i}{h}\right)$$
+
+where:
+- $K(u)$ is the Gaussian kernel: $\frac{1}{\sqrt{2\pi}}e^{-u^2/2}$
+- $h$ is the bandwidth (controls smoothness)
+- $x_i$ are the observed data points
+
+## Bandwidth Selection
+
+We use **Silverman's rule of thumb** to automatically select bandwidth:
+
+$$h \approx 0.9 \cdot \min(\sigma, \text{IQR}/1.34) \cdot n^{-1/5}$$
+
+This balances smoothness and detail:
+- **Small bandwidth**: Shows more detail, may reveal multiple peaks
+- **Large bandwidth**: Smoother curve, may merge nearby peaks
+
+## Why KDE is Useful
+
+1. **No distributional assumptions**: Unlike parametric methods, KDE doesn't assume data is Normal
+2. **Reveals multiple peaks**: Can show bimodal or multimodal distributions naturally
+3. **Visual validation**: Helps identify whether outlier filtering is appropriate
+4. **Continuous estimates**: Provides smooth density for any metric value
+
+The KDE curves appear as red lines on single-distribution plots, and as dashed lines (dark blue for intact, dark red for defective) on comparison plots.
+
+---
