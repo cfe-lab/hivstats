@@ -117,29 +117,52 @@ def compute_kde(scores, num_points=1000, bw_method=None):
     return x_vals, density
 
 
-def scale_kde_to_histogram(density, x_vals, hist_counts, bin_width):
-    """Scale KDE density to match histogram count scale.
+def scale_kde_to_histogram(density, x_vals, bins, counts):
+    """Scale KDE density to touch the histogram at its peak.
+
+    This finds where the histogram peak is located, evaluates the KDE at that
+    location, and scales so the KDE touches the top of the tallest bar.
 
     Args:
         density: KDE density values
         x_vals: x-values where KDE was evaluated
-        hist_counts: Maximum count in histogram
-        bin_width: Width of histogram bins
+        bins: Histogram bin edges
+        counts: Histogram counts for each bin
 
     Returns:
         Scaled density values
     """
-    if density is None or len(density) == 0:
+    if density is None or len(density) == 0 or len(counts) == 0:
         return density
 
-    # Scale so KDE peak roughly matches histogram scale
-    # Histogram shows counts, KDE shows density
-    # To match: multiply density by (n * bin_width)
-    kde_max = np.max(density)
-    if kde_max > 0:
-        scale_factor = hist_counts * bin_width / kde_max
-        return density * scale_factor
-    return density
+    # Find the histogram's peak location (center of tallest bin)
+    max_count_idx = np.argmax(counts)
+    max_count = counts[max_count_idx]
+
+    if max_count == 0:
+        return density
+
+    # Get the center of the tallest bin
+    if max_count_idx < len(bins) - 1:
+        peak_x = (bins[max_count_idx] + bins[max_count_idx + 1]) / 2
+    else:
+        peak_x = bins[max_count_idx]
+
+    # Find the KDE value at the histogram's peak location
+    # Find the closest x_val to peak_x
+    closest_idx = np.argmin(np.abs(x_vals - peak_x))
+    kde_at_peak = density[closest_idx]
+
+    if kde_at_peak <= 0 or np.isnan(kde_at_peak) or np.isinf(kde_at_peak):
+        # Fallback: scale by maximum
+        kde_max = np.max(density)
+        if kde_max > 0:
+            return density * (max_count / kde_max)
+        return density
+
+    # Scale so KDE touches histogram at its peak
+    scale_factor = max_count / kde_at_peak
+    return density * scale_factor
 
 
 def print_statistics(name, scores):
@@ -334,11 +357,8 @@ def show_it(orf, data):
     # Compute and plot KDE
     x_vals, density = compute_kde(scores)
     if x_vals is not None and density is not None:
-        # Scale KDE to match histogram
-        bin_width = bins[1] - bins[0] if len(bins) > 1 else 1
-        scaled_density = scale_kde_to_histogram(
-            density, x_vals, np.max(counts), bin_width
-        )
+        # Scale KDE to touch histogram at its peak
+        scaled_density = scale_kde_to_histogram(density, x_vals, bins, counts)
         plt.plot(x_vals, scaled_density, "r-", linewidth=2, label="KDE", alpha=0.8)
         plt.legend()
 
@@ -371,9 +391,8 @@ def show_two(orf, data_good, data_bad):
     # Compute and plot KDE for intact
     x_vals_good, density_good = compute_kde(scores_good)
     if x_vals_good is not None and density_good is not None:
-        bin_width = bins_good[1] - bins_good[0] if len(bins_good) > 1 else 1
         scaled_density_good = scale_kde_to_histogram(
-            density_good, x_vals_good, np.max(counts_good), bin_width
+            density_good, x_vals_good, bins_good, counts_good
         )
         ax1.plot(
             x_vals_good,
@@ -400,9 +419,8 @@ def show_two(orf, data_good, data_bad):
     # Compute and plot KDE for defective
     x_vals_bad, density_bad = compute_kde(scores_bad)
     if x_vals_bad is not None and density_bad is not None:
-        bin_width = bins_bad[1] - bins_bad[0] if len(bins_bad) > 1 else 1
         scaled_density_bad = scale_kde_to_histogram(
-            density_bad, x_vals_bad, np.max(counts_bad), bin_width
+            density_bad, x_vals_bad, bins_bad, counts_bad
         )
         ax2.plot(
             x_vals_bad,
