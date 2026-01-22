@@ -38,6 +38,7 @@ OTHER_DEFECTS = {
     "MajorSpliceDonorSiteMutated",
 }
 
+
 def get_errors(ret: dict[str, list[dict]], path: Path) -> None:
     with open(path) as f:
         r = csv.DictReader(f)
@@ -82,7 +83,9 @@ def is_indel_intact(qseqid: str, path: Path) -> bool:
     return not any(code in INDEL_DEFECTS for code in codes)
 
 
-def get_joined_it(source: Literal["los-alamos/plasma", "cfeintact/plasma", "cfeintact/all"]):
+def get_joined_it(
+    source: Literal["los-alamos/plasma", "cfeintact/plasma", "cfeintact/all"],
+):
     if source == "los-alamos/plasma":
         path = "output/individual-plasma/joined.csv"
         defects_path = None
@@ -111,7 +114,9 @@ def get_joined_it(source: Literal["los-alamos/plasma", "cfeintact/plasma", "cfei
                 row["distance_intact"] = not has_stop
                 row["indel_intact"] = not has_stop
             else:
-                row["size_structural_intact"] = is_structurally_intact(key, defects_path)
+                row["size_structural_intact"] = is_structurally_intact(
+                    key, defects_path
+                )
                 row["distance_intact"] = is_distance_intact(key, defects_path)
                 row["indel_intact"] = is_indel_intact(key, defects_path)
 
@@ -119,7 +124,9 @@ def get_joined_it(source: Literal["los-alamos/plasma", "cfeintact/plasma", "cfei
 
 
 @cache
-def get_joined(source: Literal["los-alamos/plasma", "cfeintact/all", "cfeintact/plasma"]):
+def get_joined(
+    source: Literal["los-alamos/plasma", "cfeintact/all", "cfeintact/plasma"],
+):
     """Get cached joined data for a source.
 
     Args:
