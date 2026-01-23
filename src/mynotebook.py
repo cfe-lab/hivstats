@@ -313,6 +313,61 @@ def get_scores(orf, metric, outliers, joined):
     return data
 
 
+def compute_histogram_bins(scores, numrange=None, default_bins=30):
+    """Compute appropriate histogram bins based on data characteristics.
+
+    For integer data, creates bins with edges offset by 0.5 to center bars on values.
+    For continuous data, uses default binning.
+
+    Args:
+        scores: List of numeric values
+        numrange: Optional [min, max] range for bins
+        default_bins: Number of bins to use for continuous data
+
+    Returns:
+        bins: Either an integer (number of bins) or array of bin edges
+    """
+    if len(scores) == 0:
+        return default_bins
+
+    scores_array = np.array(scores)
+
+    # Determine the data range
+    if numrange is not None:
+        data_min, data_max = numrange
+    else:
+        data_min = scores_array.min()
+        data_max = scores_array.max()
+
+    # Check if all values are integers
+    all_integers = np.all(scores_array == np.floor(scores_array))
+
+    if not all_integers:
+        # Continuous data: use default binning
+        return default_bins
+
+    # Integer data: create bins with fixed width but offset edges by 0.5
+    # This ensures bars are centered on integer values
+    # Calculate bin width to get approximately default_bins bars
+    data_range = data_max - data_min
+    if data_range == 0:
+        return default_bins
+
+    bin_width = max(1.0, data_range / default_bins)
+
+    # Round bin_width to a nice value
+    if bin_width > 1:
+        bin_width = np.ceil(bin_width)
+
+    # Create bin edges offset by 0.5 from multiples of bin_width
+    # This ensures bars are centered on values divisible by bin_width
+    min_bin = np.floor(data_min / bin_width) * bin_width - 0.5
+    max_bin = np.ceil(data_max / bin_width) * bin_width + 0.5
+    bins = np.arange(min_bin, max_bin + bin_width, bin_width)
+
+    return bins
+
+
 def filter_based_on_intactness(goodq, joined, metric):
     """Filter sequences based on appropriate intactness criteria for the metric.
 
@@ -349,16 +404,19 @@ def show_it(orf, data):
     scores = data.scores
     numrange = [data.start, data.end] if data.start is not None else None
 
+    # Compute appropriate bins for the data
+    bins = compute_histogram_bins(scores, numrange)
+
     # Create histogram
-    counts, bins, patches = plt.hist(
-        scores, bins=30, edgecolor="black", range=numrange, align="mid", alpha=0.7
+    counts, bin_edges, patches = plt.hist(
+        scores, bins=bins, edgecolor="black", range=numrange, alpha=0.7
     )
 
     # Compute and plot KDE
     x_vals, density = compute_kde(scores)
     if x_vals is not None and density is not None:
         # Scale KDE to touch histogram at its peak
-        scaled_density = scale_kde_to_histogram(density, x_vals, bins, counts)
+        scaled_density = scale_kde_to_histogram(density, x_vals, bin_edges, counts)
         plt.plot(x_vals, scaled_density, "r-", linewidth=2, label="KDE", alpha=0.8)
         plt.legend()
 
@@ -373,19 +431,22 @@ def show_two(orf, data_good, data_bad):
     scores_bad = data_bad.scores
     numrange = [data_good.start, data_good.end] if data_good.start is not None else None
 
+    # Compute bins based on the combined data to ensure consistency
+    all_scores = list(scores_good) + list(scores_bad)
+    bins = compute_histogram_bins(all_scores, numrange)
+
     fig, ax1 = plt.subplots()
     ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
 
     ax1.set_ylabel("Intact count")
     counts_good, bins_good, _ = ax1.hist(
         scores_good,
-        bins=30,
+        bins=bins,
         alpha=0.5,
         label="Intact",
         edgecolor="black",
         color="black",
         range=numrange,
-        align="mid",
     )
 
     # Compute and plot KDE for intact
@@ -407,13 +468,12 @@ def show_two(orf, data_good, data_bad):
     ax2.set_ylabel("Defective count")
     counts_bad, bins_bad, _ = ax2.hist(
         scores_bad,
-        bins=30,
+        bins=bins,
         alpha=0.5,
         label="Defective",
         edgecolor="black",
         color="red",
         range=numrange,
-        align="mid",
     )
 
     # Compute and plot KDE for defective
